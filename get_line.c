@@ -48,42 +48,40 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
  * Return: Number of bytes read.
  */
 ssize_t get_input(info_t *info)
-
-	static char *buf;
-	static size_t i, j, len;
+{
+	char *buf = NULL;
+	size_t i = 0, j = 0, len = 0;
 	ssize_t r = 0;
 	char **buf_p = &(info->arg);
+	char *p = buf + i;
 
 	_putchar(BUF_FLUSH);
 	r = input_buf(info, &buf, &len);
-if (r == -1)
-	return (-1);
-if (len)
-{
-	j = i;
-	char *p = buf + i;
+	if (r == -1)
+		return (-1);
 
-	check_chain(info, buf, &j, i, len);
-	while (j < len)
+	if (len)
 	{
-		if (is_chain(info, buf, &j))
-			break;
-		j++;
+		j = i;
+
+		check_chain(info, buf, &j, i, len);
+		while (j < len)
+		{
+			if (is_chain(info, buf, &j))
+				break;
+			j++;
+		}
+		i = j + 1;
+		if (i >= len)
+		{
+			i = len = 0;
+			info->cmd_buf_type = CMD_NORM;
+		}
+		*buf_p = p;
+		return (_strlen(p));
 	}
-
-	i = j + 1;
-	if (i >= len)
-	{
-		i = len = 0;
-		info->cmd_buf_type = CMD_NORM;
-	}
-
-	*buf_p = p;
-	return (_strlen(p));
-}
-
-*buf_p = buf;
-return (r);
+	*buf_p = buf;
+	return (r);
 }
 
 /**
@@ -96,21 +94,22 @@ return (r);
  */
 int _getline(info_t *info, char **ptr, size_t *length)
 {
-	char buf[READ_BUF_SIZE];
-	size_t i = 0, len = 0;
+	char buf[READ_BUF_SIZE] = {'\0'};
 	ssize_t r = 0, s = 0;
 	char *p = NULL, *new_p = NULL, *c;
+	size_t i = 0, len = 0;
+	size_t k;
 
 	p = *ptr;
 	if (p && length)
 		s = *length;
 
-	r = read_buf(info, buf, &len);
+	r = read_buf(info, &p, &len);
 	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
 
 	c = _strchr(buf + i, '\n');
-	size_t k = c ? 1 + (unsigned int)(c - buf) : len;
+	k = c ? 1 + (unsigned int)(c - buf) : len;
 
 	new_p = _realloc(p, s, s ? s + k : k + 1);
 	if (!new_p)

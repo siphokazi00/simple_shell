@@ -8,22 +8,26 @@
  */
 char **strtow(char *str, char *d)
 {
+	size_t numwords = 0;
+	char **s;
+	size_t i, j, k, m;
+
 	if (str == NULL || str[0] == '\0' || numwords == 0)
 		return (NULL);
 
-	char delimiter = (d == NULL) ? ' ' : *d;
-
-	if (!d)
-		d = " ";
 	for (i = 0; str[i] != '\0'; i++)
+	{
 		if (!is_delim(str[i], d) && (is_delim(str[i + 1], d) || !str[i + 1]))
-			numwords++;
+            numwords++;
+	}
 
 	if (numwords == 0)
 		return (NULL);
+
 	s = malloc((1 + numwords) * sizeof(char *));
 	if (!s)
 		return (NULL);
+
 	for (i = 0, j = 0; j < numwords; j++)
 	{
 		while (is_delim(str[i], d))
@@ -31,6 +35,7 @@ char **strtow(char *str, char *d)
 		k = 0;
 		while (!is_delim(str[i + k], d) && str[i + k])
 			k++;
+
 		s[j] = malloc((k + 1) * sizeof(char));
 		if (!s[j])
 		{

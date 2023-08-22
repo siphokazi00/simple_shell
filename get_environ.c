@@ -48,43 +48,31 @@ int _unsetenv(info_t *info, char *var)
 }
 
 /**
- * _setenv - Initialize a new environment variable,
- * or modify an existing one.
- * @info: Structure containing potential arguments. Used to maintain
- * constant function prototype.
- * @var: The string env var property.
- * @value: The string env var value.
- * Return: Always 0.
+ * _setenv - Set or update an environment variable.
+ * @info: The parameter struct.
+ * @var: The variable name.
+ * @value: The variable value.
+ * Return: 0 on success, 1 on failure.
  */
 int _setenv(info_t *info, char *var, char *value)
 {
 	char *buf = NULL;
-	list_t *node;
-	char *p;
+	int found = find_env_node(info, var, value);
 
 	if (!var || !value)
 		return (0);
-
 	buf = malloc(_strlen(var) + _strlen(value) + 2);
 	if (!buf)
 		return (1);
 	_strcpy(buf, var);
 	_strcat(buf, "=");
 	_strcat(buf, value);
-	node = info->env;
-	while (node)
+	if (found)
 	{
-		p = starts_with(node->str, var);
-		if (p && *p == '=')
-		{
-			free(node->str);
-			node->str = buf;
-			info->env_changed = 1;
-			return (0);
-		}
-		node = node->next;
+		free(buf);
+		return (0);
 	}
-	add_node_end(&(info->env), buf, 0);
+	add_env_node(info, var, value);
 	free(buf);
 	info->env_changed = 1;
 	return (0);

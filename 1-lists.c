@@ -60,9 +60,9 @@ char **list_to_strings(list_t *head)
  *
  * Return: Size of the list.
  */
-size_t print_list(const list_t *h)
+size_t print_list(const  list_t *h)
 {
-	size_t i = 0
+	size_t i = 0;
 
 		while (h)
 		{

@@ -16,6 +16,7 @@
 #define READ_BUF_SIZE 1024
 #define WRITE_BUF_SIZE 1024
 #define BUF_FLUSH -1
+#define MAX_DEST_SIZE 256
 
 /* for command chaining */
 #define CMD_NORM	0
@@ -132,13 +133,13 @@ int _putfd(char c, int fd);
 int _putsfd(char *str, int fd);
 
 /* toem_string.c */
-int _strlen(char *);
+int _strlen(const char *);
 int _strcmp(char *, char *);
 char *starts_with(const char *, const char *);
-char *_strcat(char *, char *);
+char *_strcat(char *dest, const char *src);
 
 /* toem_string1.c */
-char *_strcpy(char *, char *);
+char *_strcpy(char *dest, const char *src);
 char *_strdup(const char *);
 void _puts(char *);
 int _putchar(char);
@@ -162,9 +163,9 @@ int bfree(void **);
 
 /* toem_atoi.c */
 int interactive(info_t *);
-int is_delim(char, char *);
+int is_delim(char c, const char *delim);
 int _isalpha(int);
-int _atoi(char *);
+int _atoi(const char *s);
 
 /* toem_errors1.c */
 int _erratoi(char *);
@@ -185,6 +186,7 @@ int _myalias(info_t *);
 /*toem_getline.c */
 ssize_t get_input(info_t *);
 int _getline(info_t *, char **, size_t *);
+ssize_t read_buf(info_t *info, char **buffer, size_t *buf_size);
 void sigintHandler(int);
 
 /* toem_getinfo.c */
@@ -202,6 +204,8 @@ int populate_env_list(info_t *);
 /* toem_getenv.c */
 char **get_environ(info_t *);
 int _unsetenv(info_t *, char *);
+int find_env_node(info_t *info, char *var, char *value);
+void add_env_node(info_t *info, char *var, char *value);
 int _setenv(info_t *, char *, char *);
 
 /* toem_history.c */

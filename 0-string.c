@@ -6,7 +6,7 @@
  *
  * Return: integer length of string
  */
-int _strlen(char *s)
+int _strlen(const char *s)
 {
 	int i = 0;
 
@@ -64,12 +64,12 @@ char *starts_with(const char *haystack, const char *needle)
  */
 char *_strcat(char *dest, const char *src)
 {
+	char *ret = dest;
+
 	if (dest == NULL || src == NULL)
 	{
 		return (NULL);
 	}
-
-	char *ret = dest;
 
 	while (*dest)
 	{

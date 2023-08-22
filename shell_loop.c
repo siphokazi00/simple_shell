@@ -55,9 +55,6 @@ int hsh(info_t *info, char **av)
 int find_builtin(info_t *info)
 {
 	const int BUILTIN_NOT_FOUND = -1;
-	const int BUILTIN_EXECUTED_SUCCESS = 0;
-	const int BUILTIN_FOUND_NOT_SUCCESS = 1;
-	const int BUILTIN_SIGNALS_EXIT = 2;
 
 	int i, built_in_ret = BUILTIN_NOT_FOUND;
 	builtin_table builtintbl[] = {
@@ -139,7 +136,6 @@ void fork_cmd(info_t *info)
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		/* TODO: PUT ERROR FUNCTION */
 		perror("Error:");
 		return;
 	}
@@ -152,7 +148,7 @@ void fork_cmd(info_t *info)
 				exit(126);
 			exit(1);
 		}
-		/* TODO: PUT ERROR FUNCTION */
+
 	}
 	else
 	{

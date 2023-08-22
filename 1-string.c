@@ -9,11 +9,12 @@
  */
 char *_strcpy(char *dest, const char *src)
 {
+	int i = 0;
+
 	if (dest == NULL || src == NULL)
 	{
 		return (NULL);
 	}
-	int i = 0;
 
 	while (src[i] && i < MAX_DEST_SIZE - 1)
 	{

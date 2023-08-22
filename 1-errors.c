@@ -39,7 +39,8 @@ int _erratoi(char *str)
  */
 void print_error(info_t *info, char *estr)
 {
-	fprintf(stderr, "%s: %d: %s: %s", info->fname, info->line_count, info->argv[0], estr);
+	fprintf(stderr, "%s: %d: %s: %s", info->fname, info->line_count,
+			info->argv[0], estr);
 }
 
 /**
@@ -62,10 +63,10 @@ int print_d(int input, int fd)
 		count++;
 	}
 
-	do{
+	do {
 		__putchar('0' + current / 1000000000);
 		count++;
-		current %= 1000000000
+		current %= 1000000000;
 	} while (current > 0);
 
 	return (count);
@@ -116,7 +117,9 @@ char *convert_number(long int num, int base, int flags)
  */
 void remove_comments(char *str)
 {
-	for (int i = 0; str[i] != '\0'; i++)
+	int i;
+
+	for (i = 0; str[i] != '\0'; i++)
 	{
 		if (str[i] == '#' && (i == 0 || str[i - 1] == ' '))
 		{

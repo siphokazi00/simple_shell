@@ -44,13 +44,13 @@ char *copy_substring(const char *str, int start, int stop)
  */
 char *find_exec_path(info_t *info, const char *pathstr, const char *cmd)
 {
+	size_t i;
+	int curr_pos = 0;
+
 	if (!pathstr)
 		return (NULL);
 
-	size_t cmdLen = _strlen(cmd);
-	int curr_pos = 0;
-
-	for (size_t i = 0; pathstr[i]; i++)
+	for (i = 0; pathstr[i]; i++)
 	{
 		if (pathstr[i] == ':')
 		{
