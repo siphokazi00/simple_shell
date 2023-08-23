@@ -1,130 +1,55 @@
 #include "shell.h"
 
 /**
- * _erratoi - Converts a string to an integer.
- * @str: The string to be converted.
+ * _error_puts - Prints an input string to stderr
+ * @str: The string to be printed
  *
- * Return: The converted number if valid,
- *         -1 on error.
+ * Return: Nothing
  */
-int _erratoi(char *str)
+void _error_puts(char *str)
 {
 	int i = 0;
-	unsigned long int result = 0;
 
-	if (*str == '+')
-		str++;
-
-	for (i = 0; str[i] != '\0'; i++)
+	if (!str)
+		return;
+	while (str[i] != '\0')
 	{
-		if (str[i] >= '0' && str[i] <= '9')
-		{
-			result *= 10;
-			result += (str[i] - '0');
-			if (result > INT_MAX)
-				return (-1);
-		}
-		else
-			return (-1);
+		write_to_fd(str[i], STDERR_FILENO);
+		i++;
 	}
-	return (result);
 }
 
 /**
- * print_error - Prints an error message.
- * @info: The parameter and return info struct.
- * @estr: String containing specified error type.
+ * _error_putchar - Writes the character c to stderr
+ * @c: The character to be written
  *
- * Return: Nothing.
+ * Return: 1 on success, -1 on error.
  */
-void print_error(info_t *info, char *estr)
+int _error_putchar(char c)
 {
-	fprintf(stderr, "%s: %d: %s: %s", info->fname, info->line_count,
-			info->argv[0], estr);
+	return (write_to_fd(c, STDERR_FILENO));
 }
 
 /**
- * print_d - Prints a decimal number.
- * @input: The input number.
- * @fd: The file descriptor to write to.
+ * _putfd - Writes the character c to the given file descriptor
+ * @c: The character to be written
+ * @fd: The file descriptor to write to
  *
- * Return: Number of characters printed.
+ * Return: 1 on success, -1 on error.
  */
-int print_d(int input, int fd)
+int _putfd(char c, int fd)
 {
-	int (*__putchar)(char) = (fd == STDERR_FILENO) ? _eputchar : _putchar;
-	int count = 0;
-	unsigned int _abs_ = (input < 0) ? -input : input;
-	unsigned int current = _abs_;
-
-	if (input < 0)
-	{
-		__putchar('-');
-		count++;
-	}
-
-	do {
-		__putchar('0' + current / 1000000000);
-		count++;
-		current %= 1000000000;
-	} while (current > 0);
-
-	return (count);
+	return (write_to_fd(c, fd));
 }
 
 /**
- * convert_number - Converts a number to a string.
- * @num: The number to convert.
- * @base: The base for conversion (e.g., 10 for decimal).
- * @flags: Argument flags (CONVERT_LOWERCASE, CONVERT_UNSIGNED).
+ * _putsfd - Prints an input string to the specified file descriptor
+ * @str: The string to be printed
+ * @fd: The file descriptor to write to
  *
- * Return: A string representation of the number.
+ * Return: The number of characters written
  */
-char *convert_number(long int num, int base, int flags)
+int _putsfd(char *str, int fd)
 {
-	static char *array;
-	static char buffer[50];
-	char sign = 0;
-	char *ptr;
-	unsigned long n = num;
-
-	if (!(flags & CONVERT_UNSIGNED) && num < 0)
-	{
-		n = -num;
-		sign = '-';
-	}
-
-	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
-	ptr = &buffer[49];
-	*ptr = '\0';
-
-	do {
-		*--ptr = array[n % base];
-		n /= base;
-	} while (n != 0);
-
-	if (sign)
-		*--ptr = sign;
-
-	return (ptr);
-}
-
-/**
- * remove_comments - Replaces the first instance of '#' with '\0'.
- * @str: Address of the string to modify.
- *
- * Return: Always 0.
- */
-void remove_comments(char *str)
-{
-	int i;
-
-	for (i = 0; str[i] != '\0'; i++)
-	{
-		if (str[i] == '#' && (i == 0 || str[i - 1] == ' '))
-		{
-			str[i] = '\0';
-			break;
-		}
-	}
+	return (write_string_to_fd(str, fd));
 }

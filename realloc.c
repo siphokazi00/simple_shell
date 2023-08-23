@@ -3,16 +3,25 @@
 #include <string.h>
 
 /**
- * *_memset
+ * _memset - Fill memory with a constant byte.
+ * @s: A pointer to the memory area to fill.
+ * @b: The byte value to be set.
+ * @n: The number of bytes to be set to the value.
+ *
+ * Return: A pointer to the memory area @s.
  */
-#include <string.h>
-
 char *_memset(char *s, char b, unsigned int n)
 {
 	return (memset(s, b, n));
 }
+
 /**
- * free_string_array - 
+ * freeStringArray - Free memory allocated for an array of strings.
+ * @strArray: An array of strings.
+ *
+ * This function iterates through each string in the @strArray and frees
+ * the memory occupied by each string. It then frees the memory occupied
+ * by the @strArray itself.
  */
 void freeStringArray(char **strArray)
 {
@@ -28,8 +37,14 @@ void freeStringArray(char **strArray)
 	}
 	free(strArray);
 }
+
 /**
- * _realloc -
+ * _realloc - Reallocate memory for a dynamically allocated block.
+ * @ptr: A pointer to the previously allocated memory block.
+ * @old_size: The old size of the memory block.
+ * @new_size: The new size of the memory block.
+ *
+ * Return: A pointer to the newly allocated memory block.
  */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
