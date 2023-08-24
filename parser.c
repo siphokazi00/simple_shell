@@ -1,85 +1,84 @@
-#include "shell.h"
-
 /**
- * is_executable_file - Check if a file at the specified path is executable.
- * @info: Unused parameter (for consistency with other function prototypes).
- * @path: The path to the file to check.
+ * is_cmd - Checks if a file is an executable command.
+ * @info: Pointer to the info struct.
+ * @path: Path to the file.
  *
- * Return: 1 if the file is executable, 0 otherwise.
+ * Returns: 1 if it's an executable command, 0 otherwise.
  */
-int is_executable_file(info_t *info, char *path)
+int is_cmd(info_t *info, char *path)
 {
-	struct stat st;
-	(void)info;
-	return (!(!path || stat(path, &st) || !(st.st_mode & S_IFREG)));
+    struct stat st;
+
+    (void)info;
+    if (!path || stat(path, &st))
+        return 0;
+
+    if (st.st_mode & S_IFREG)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 /**
- * copy_substring - Create a copy of a substring from a given string.
- * @str: The input string.
- * @start: The starting index of the substring.
- * @stop: The ending index of the substring.
+ * dup_chars - Duplicates a range of characters from a string.
+ * @pathstr: The source string (PATH).
+ * @start: Starting index of the range.
+ * @stop: Stopping index of the range.
  *
- * Return: A newly allocated string containing the copied substring,
- * or NULL if an error occurs or if the substring is empty.
+ * Returns: Pointer to a new buffer containing the duplicated characters.
  */
-char *copy_substring(const char *str, int start, int stop)
+char *dup_chars(char *pathstr, int start, int stop)
 {
-	char *substr = NULL;
-	int len = stop - start;
+    static char buf[1024];
+    int i = 0, k = 0;
 
-	if (len <= 0)
-		return (NULL);
-
-	substr = malloc(len + 1);
-	if (substr)
-	{
-		strncpy(substr, str + start, len);
-		substr[len] = '\0';
-	}
-	return (substr);
+    for (k = 0, i = start; i < stop; i++)
+        if (pathstr[i] != ':')
+            buf[k++] = pathstr[i];
+    buf[k] = '\0';
+    return buf;
 }
 
 /**
- * find_exec_path - Find the executable path of a command in a specified path.
- * @info: Unused parameter (for consistency with other function prototypes).
- * @pathstr: The colon-separated list of directories to search for the command.
- * @cmd: The name of the command to find.
+ * find_path - Finds the full path of a command in the PATH string.
+ * @info: Pointer to the info struct.
+ * @pathstr: The PATH string.
+ * @cmd: The command to find.
  *
- * Return: A dynamically allocated string containing the full path to the
- * executable command, or NULL if the command is not found or if an
- * error occurs.
+ * Returns: Full path of the command if found, or NULL if not found.
  */
-char *find_exec_path(info_t *info, const char *pathstr, const char *cmd)
+char *find_path(info_t *info, char *pathstr, char *cmd)
 {
-	size_t i;
-	int curr_pos = 0;
+    int i = 0, curr_pos = 0;
+    char *path;
 
-	if (!pathstr)
-		return (NULL);
-
-	for (i = 0; pathstr[i]; i++)
-	{
-		if (pathstr[i] == ':')
-		{
-			char *path = copy_substring(pathstr, curr_pos, i);
-
-			if (path)
-			{
-				if (path[0] != '\0')
-				{
-					_strcat(path, "/");
-				}
-				_strcat(path, cmd);
-				if (is_executable_file(info, path))
-				{
-					return (path);
-				}
-			}
-			free(path);
-			curr_pos = i + 1;
-		}
-	}
-
-	return (NULL);
+    if (!pathstr)
+        return NULL;
+    if ((_strlen(cmd) > 2) && starts_with(cmd, "./"))
+    {
+        if (is_cmd(info, cmd))
+            return cmd;
+    }
+    while (1)
+    {
+        if (!pathstr[i] || pathstr[i] == ':')
+        {
+            path = dup_chars(pathstr, curr_pos, i);
+            if (!*path)
+                _strcat(path, cmd);
+            else
+            {
+                _strcat(path, "/");
+                _strcat(path, cmd);
+            }
+            if (is_cmd(info, path))
+                return path;
+            if (!pathstr[i])
+                break;
+            curr_pos = i;
+        }
+        i++;
+    }
+    return NULL;
 }

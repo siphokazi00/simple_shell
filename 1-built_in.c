@@ -1,9 +1,10 @@
 #include "shell.h"
 
 /**
- * _myhistory - displays the history list
+ * _myhistory - Display the command history with line numbers.
  * @info: Structure containing potential arguments.
- * Return: Always 0
+ * 
+ * Return: Always 0.
  */
 int _myhistory(info_t *info)
 {
@@ -12,10 +13,11 @@ int _myhistory(info_t *info)
 }
 
 /**
- * unset_alias - unsets an alias
- * @info: parameter struct
- * @str: the string alias
- * Return: 0 on success, 1 on error
+ * unset_alias - Unset an alias identified by a string.
+ * @info: Parameter struct.
+ * @str: The alias string to unset.
+ * 
+ * Return: 0 on success, 1 on error.
  */
 int unset_alias(info_t *info, char *str)
 {
@@ -26,7 +28,7 @@ int unset_alias(info_t *info, char *str)
 	if (!p)
 		return (1);
 	c = *p;
-	*p = '\0';
+	*p = 0;
 	ret = delete_node_at_index(&(info->alias),
 		get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
 	*p = c;
@@ -34,10 +36,11 @@ int unset_alias(info_t *info, char *str)
 }
 
 /**
- * set_alias - sets or updates an alias
- * @info: parameter struct
- * @str: the string alias
- * Return: 0 on success, 1 on error
+ * set_alias - Set an alias to a string.
+ * @info: Parameter struct.
+ * @str: The string alias to set.
+ * 
+ * Return: 0 on success, 1 on error.
  */
 int set_alias(info_t *info, char *str)
 {
@@ -54,9 +57,10 @@ int set_alias(info_t *info, char *str)
 }
 
 /**
- * print_alias - prints an alias string
- * @node: the alias node
- * Return: 0 on success, 1 on error
+ * print_alias - Print an alias string.
+ * @node: The alias node to print.
+ * 
+ * Return: 0 on success, 1 on error.
  */
 int print_alias(list_t *node)
 {
@@ -76,9 +80,10 @@ int print_alias(list_t *node)
 }
 
 /**
- * _myalias - manages aliases
+ * _myalias - Manage shell aliases.
  * @info: Structure containing potential arguments.
- * Return: Always 0
+ * 
+ * Return: Always 0.
  */
 int _myalias(info_t *info)
 {
@@ -96,7 +101,6 @@ int _myalias(info_t *info)
 		}
 		return (0);
 	}
-
 	for (i = 1; info->argv[i]; i++)
 	{
 		p = _strchr(info->argv[i], '=');

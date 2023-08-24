@@ -1,70 +1,77 @@
 #include "shell.h"
 
 /**
- * _strncpy - Copies a string up to 'n' characters.
- * @dest: The destination string to copy to.
+ * _strncpy - Copy a string with a specified length.
+ * @dest: The destination string to be copied to.
  * @src: The source string.
- * @n: The maximum number of characters to copy.
- *
- * Return: A pointer to the destination string.
+ * @n: The number of characters to be copied.
+ * 
+ * Return: The concatenated string.
  */
 char *_strncpy(char *dest, char *src, int n)
 {
-	char *destination = dest;
+	int i, j;
+	char *s = dest;
 
-	while (*src != '\0' && n > 0)
+	i = 0;
+	while (src[i] != '\0' && i < n - 1)
 	{
-		*dest = *src;
-		dest++;
-		src++;
-		n--;
+		dest[i] = src[i];
+		i++;
 	}
-	*dest = '\0';
-	return (destination);
+	if (i < n)
+	{
+		j = i;
+		while (j < n)
+		{
+			dest[j] = '\0';
+			j++;
+		}
+	}
+	return (s);
 }
 
 /**
- * _strncat - Concatenates 'n' characters from 'src' to 'dest'.
- * @dest: The destination string.
- * @src: The source string.
- * @n: The maximum number of characters to concatenate.
- *
- * Return: A pointer to the destination string.
+ * _strncat - Concatenate two strings with a specified maximum length.
+ * @dest: The first string.
+ * @src: The second string.
+ * @n: The maximum number of bytes to be used.
+ * 
+ * Return: The concatenated string.
  */
 char *_strncat(char *dest, char *src, int n)
 {
-	char *destination = dest;
-	char *dest_end = dest;
+	int i, j;
+	char *s = dest;
 
-	while (*dest_end)
-		dest_end++;
-
-	while (*src != '\0' && n > 0)
+	i = 0;
+	j = 0;
+	while (dest[i] != '\0')
+		i++;
+	while (src[j] != '\0' && j < n)
 	{
-		*dest_end = *src;
-		dest_end++;
-		src++;
-		n--;
+		dest[i] = src[j];
+		i++;
+		j++;
 	}
-
-	*dest_end = '\0';
-	return (destination);
+	if (j < n)
+		dest[i] = '\0';
+	return (s);
 }
 
 /**
- * _strchr - Locates a character in a string.
- * @s: The string to be searched.
+ * _strchr - Locate a character in a string.
+ * @s: The string to be parsed.
  * @c: The character to look for.
- *
- * Return: A pointer to the first occurrence of the character in 's'.
- *         NULL if the character is not found.
+ * 
+ * Return: A pointer to the memory area in s.
  */
 char *_strchr(char *s, char c)
 {
-	for (; *s != '\0'; s++)
-	{
+	do {
 		if (*s == c)
 			return (s);
-	}
+	} while (*s++ != '\0');
+
 	return (NULL);
 }
