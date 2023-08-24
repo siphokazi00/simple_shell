@@ -1,3 +1,5 @@
+#include "shell.h"
+
 /**
  * hsh - Main shell loop that reads and processes user commands.
  * @info: Pointer to the parameter & return info struct.

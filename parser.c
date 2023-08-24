@@ -1,3 +1,5 @@
+#include "shell.h"
+
 /**
  * is_cmd - Checks if a file is an executable command.
  * @info: Pointer to the info struct.

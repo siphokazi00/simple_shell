@@ -1,3 +1,5 @@
+#include "shell.h"
+
 /**
  * is_chain - Tests if the current character in the buffer is a chain delimiter.
  * @info: The parameter struct.

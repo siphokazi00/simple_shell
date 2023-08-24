@@ -1,3 +1,5 @@
+#include "shell.h"
+
 /**
  * bfree - Frees memory associated with a pointer and sets it to NULL.
  * @ptr: Address of the pointer to be freed and NULLed.
